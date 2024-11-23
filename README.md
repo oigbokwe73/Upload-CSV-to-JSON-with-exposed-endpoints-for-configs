@@ -22,7 +22,7 @@ This solution should handle large datasets, ensure data integrity, and be scalab
 
 2. **Technology Stack**:
    - **API Management**: Azure API Management (APIM).
-   - **Database**: Azure Cosmos DB (NoSQL database).
+   - **Database**: Azure Azure Table NoSQL (NoSQL database).
    - **Serverless Functions**: Azure Function App for processing CSV uploads and handling API requests.
    - **Storage**: Azure Blob Storage for temporary CSV file storage before processing.
    - **Programming Language**: Python or Node.js.
@@ -39,14 +39,14 @@ This solution should handle large datasets, ensure data integrity, and be scalab
   2. Save the CSV file temporarily in Azure Blob Storage.
   3. Parse the CSV file into records.
   4. Generate a unique `Batch ID` (UUID or timestamp-based).
-  5. Insert records into Azure Cosmos DB under the corresponding `Batch ID`.
+  5. Insert records into Azure Azure Table NoSQL under the corresponding `Batch ID`.
   6. Return the `Batch ID` as a response to the API call.
 
 #### **2. Data Retrieval Workflow**
 
 - **Input**: `Batch ID` via GET request to the API endpoint `/retrieve/{batch_id}`.
 - **Processing Steps**:
-  1. Query Azure Cosmos DB for records associated with the `Batch ID`.
+  1. Query Azure Azure Table NoSQL for records associated with the `Batch ID`.
   2. Return the data as a JSON response.
 
 ---
@@ -76,37 +76,13 @@ This solution should handle large datasets, ensure data integrity, and be scalab
 - Use Azure Blob Storage SDK to store the file temporarily.
 - Parse the file using a library like Pandas (Python) or csv-parser (Node.js).
 - Generate a `Batch ID`.
-- Store each record in Cosmos DB with the `Batch ID`.
+- Store each record in Azure Table NoSQL with the `Batch ID`.
 
 ---
 
-#### **2. Retrieve Data Endpoint**
-
-**Endpoint**: `/retrieve/{batch_id}`  
-**Method**: GET  
-**Response**:
-```json
-{
-  "status": "success",
-  "data": [
-    {
-      "product_id": "P123",
-      "color": "Red",
-      "size": "M",
-      "price": 25.99
-    },
-    {
-      "product_id": "P124",
-      "color": "Blue",
-      "size": "L",
-      "price": 27.99
-    }
-  ]
-}
-```
 
 **Logic**:
-- Query Cosmos DB for all records matching the `Batch ID`.
+- Query Azure Table NoSQL for all records matching the `Batch ID`.
 - Format and return the results as JSON.
 
 ---
@@ -121,7 +97,7 @@ import pandas as pd
 from azure.storage.blob import BlobServiceClient
 from azure.cosmos import CosmosClient
 
-# Azure Blob and Cosmos DB initialization
+# Azure Blob and Azure Table NoSQL initialization
 blob_service_client = BlobServiceClient.from_connection_string("AzureBlobConnectionString")
 cosmos_client = CosmosClient("AzureCosmosEndpoint", "AzureCosmosKey")
 database = cosmos_client.get_database_client("configurator")
@@ -139,7 +115,7 @@ def upload_csv(file):
     df = pd.read_csv(file)
     records = df.to_dict(orient="records")
     
-    # Insert into Cosmos DB
+    # Insert into Azure Table NoSQL
     for record in records:
         record["batch_id"] = batch_id
         container.upsert_item(record)
@@ -167,7 +143,7 @@ graph TD
     A[Client] -->|Upload CSV| B[API Gateway]
     B --> C[Azure Function App - Upload Endpoint]
     C --> D[Azure Blob Storage]
-    C --> E[Azure Cosmos DB]
+    C --> E[Azure Azure Table NoSQL]
     A -->|Retrieve Data| F[API Gateway]
     F --> G[Azure Function App - Retrieve Endpoint]
     G --> E
@@ -177,7 +153,7 @@ graph TD
 ---
 
 ### **Key Benefits**
-- **Scalability**: Cosmos DB handles large datasets.
+- **Scalability**: Azure Table NoSQL handles large datasets.
 - **Flexibility**: APIs enable integration with other services.
 - **Traceability**: Unique `Batch ID` tracks data upload and retrieval.
 - **Security**: Azure services ensure secure data handling.
