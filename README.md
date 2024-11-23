@@ -22,7 +22,7 @@ This solution should handle large datasets, ensure data integrity, and be scalab
 
 2. **Technology Stack**:
    - **API Management**: Azure API Management (APIM).
-   - **Database**: Azure Azure Table NoSQL (NoSQL database).
+   - **Database**: Azure Table NoSQL (NoSQL database).
    - **Serverless Functions**: Azure Function App for processing CSV uploads and handling API requests.
    - **Storage**: Azure Blob Storage for temporary CSV file storage before processing.
    - **Programming Language**: Python or Node.js.
@@ -39,14 +39,14 @@ This solution should handle large datasets, ensure data integrity, and be scalab
   2. Save the CSV file temporarily in Azure Blob Storage.
   3. Parse the CSV file into records.
   4. Generate a unique `Batch ID` (UUID or timestamp-based).
-  5. Insert records into Azure Azure Table NoSQL under the corresponding `Batch ID`.
+  5. Insert records into Azure Table NoSQL under the corresponding `Batch ID`.
   6. Return the `Batch ID` as a response to the API call.
 
 #### **2. Data Retrieval Workflow**
 
 - **Input**: `Batch ID` via GET request to the API endpoint `/retrieve/{batch_id}`.
 - **Processing Steps**:
-  1. Query Azure Azure Table NoSQL for records associated with the `Batch ID`.
+  1. Query Azure Table NoSQL for records associated with the `Batch ID`.
   2. Return the data as a JSON response.
 
 ---
@@ -143,7 +143,7 @@ graph TD
     A[Client] -->|Upload CSV| B[API Gateway]
     B --> C[Azure Function App - Upload Endpoint]
     C --> D[Azure Blob Storage]
-    C --> E[Azure Azure Table NoSQL]
+    C --> E[Azure Table NoSQL]
     A -->|Retrieve Data| F[API Gateway]
     F --> G[Azure Function App - Retrieve Endpoint]
     G --> E
