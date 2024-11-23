@@ -49,28 +49,6 @@ This solution should handle large datasets, ensure data integrity, and be scalab
   1. Query Azure Table NoSQL for records associated with the `Batch ID`.
   2. Return the data as a JSON response.
 
----
-
-### **Detailed Steps**
-
-#### **1. Upload CSV Endpoint**
-
-**Endpoint**: `/upload`  
-**Method**: POST  
-**Request**:
-```json
-{
-  "file": "CSV file as multipart/form-data"
-}
-```
-
-**Response**:
-```json
-{
-  "status": "success",
-  "batch_id": "123e4567-e89b-12d3-a456-426614174000"
-}
-```
 
 **Logic**:
 - Use Azure Blob Storage SDK to store the file temporarily.
@@ -84,19 +62,6 @@ This solution should handle large datasets, ensure data integrity, and be scalab
 **Logic**:
 - Query Azure Table NoSQL for all records matching the `Batch ID`.
 - Format and return the results as JSON.
-
----
-
----
-
-#### **Retrieve Data API (Python)**
-
-```python
-def retrieve_data(batch_id):
-    query = f"SELECT * FROM c WHERE c.batch_id = '{batch_id}'"
-    items = list(container.query_items(query=query, enable_cross_partition_query=True))
-    return {"status": "success", "data": items}
-```
 
 ---
 
