@@ -87,4 +87,3 @@ graph TD
 - **Traceability**: Unique `Batch ID` tracks data upload and retrieval.
 - **Security**: Azure services ensure secure data handling.
 
-Would you like further expansion on implementation or enhancements?
