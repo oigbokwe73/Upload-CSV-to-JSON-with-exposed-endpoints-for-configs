@@ -87,42 +87,6 @@ This solution should handle large datasets, ensure data integrity, and be scalab
 
 ---
 
-### **Example Code**
-
-#### **Upload CSV API (Python)**
-
-```python
-import uuid
-import pandas as pd
-from azure.storage.blob import BlobServiceClient
-from azure.cosmos import CosmosClient
-
-# Azure Blob and Azure Table NoSQL initialization
-blob_service_client = BlobServiceClient.from_connection_string("AzureBlobConnectionString")
-cosmos_client = CosmosClient("AzureCosmosEndpoint", "AzureCosmosKey")
-database = cosmos_client.get_database_client("configurator")
-container = database.get_container_client("batch_data")
-
-def upload_csv(file):
-    # Generate Batch ID
-    batch_id = str(uuid.uuid4())
-    
-    # Save file to Blob Storage
-    blob_client = blob_service_client.get_blob_client(container="csv-container", blob=f"{batch_id}.csv")
-    blob_client.upload_blob(file)
-    
-    # Parse CSV
-    df = pd.read_csv(file)
-    records = df.to_dict(orient="records")
-    
-    # Insert into Azure Table NoSQL
-    for record in records:
-        record["batch_id"] = batch_id
-        container.upsert_item(record)
-    
-    return {"status": "success", "batch_id": batch_id}
-```
-
 ---
 
 #### **Retrieve Data API (Python)**
