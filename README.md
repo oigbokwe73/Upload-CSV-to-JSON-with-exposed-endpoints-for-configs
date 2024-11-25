@@ -1,6 +1,6 @@
 # ApiConnectorConfigFiles
 
-### **Use Case: Implementing a Configurator Manager for CSV File Management**
+### **Use Case: Implementing a Configurator Manager ingest and retrieve CSV Files for shared applications**
 
 #### **Business Scenario**
 A retail company, **RetailFlex**, operates a product customization platform where customers can configure and order personalized products. The company uses a **Configurator Manager** to manage product configuration data. The configuration data is uploaded as CSV files and stored in a **NoSQL database**. RetailFlex wants an API-based solution to:
@@ -21,11 +21,11 @@ This solution should handle large datasets, ensure data integrity, and be scalab
    - **Retrieve Data by Batch ID**: Fetches data from the NoSQL database using the `Batch ID`.
 
 2. **Technology Stack**:
-   - **API Management**: Azure API Management (APIM).
+   - **API Management**: Azure API Management (APIM). RECOMMENDED FOR PROD ENVIRONMENTS
    - **Database**: Azure Table NoSQL (NoSQL database).
    - **Serverless Functions**: Azure Function App for processing CSV uploads and handling API requests.
    - **Storage**: Azure Blob Storage for temporary CSV file storage before processing.
-   - **Programming Language**: Python or Node.js.
+   - **Programming Language**: C#
 
 ---
 
@@ -36,10 +36,10 @@ This solution should handle large datasets, ensure data integrity, and be scalab
 - **Input**: CSV file via POST request to the API endpoint `/upload`.
 - **Processing Steps**:
   1. Validate the uploaded CSV file (e.g., check headers, format).
-  2. Save the CSV file temporarily in Azure Blob Storage.
-  3. Parse the CSV file into records.
-  4. Generate a unique `Batch ID` (UUID or timestamp-based).
-  5. Insert records into Azure Table NoSQL under the corresponding `Batch ID`.
+  2. Upload CSV file via  API.
+  3. Parse the CSV file into records and transform to a JSON Payload
+  4. Write the JSON payload into a Azure Table NoSQL Database
+  5. Generate a unique `Batch ID` (UUID or timestamp-based).
   6. Return the `Batch ID` as a response to the API call.
 
 #### **2. Data Retrieval Workflow**
@@ -50,18 +50,43 @@ This solution should handle large datasets, ensure data integrity, and be scalab
   2. Return the data as a JSON response.
 
 
-**Logic**:
-- Use Azure Blob Storage SDK to store the file temporarily.
-- Parse the file using a library like Pandas (Python) or csv-parser (Node.js).
-- Generate a `Batch ID`.
-- Store each record in Azure Table NoSQL with the `Batch ID`.
-
 ---
 
 
-**Logic**:
-- Query Azure Table NoSQL for all records matching the `Batch ID`.
-- Format and return the results as JSON.
+## Appplication Setting 
+
+|Key|Value | Comment|
+|:----|:----|:----|
+|AzureWebJobsStorage|[CONNECTION STRING]|RECOMMENDATION :  store in AzureKey Vault.|
+|ConfigurationPath| [CONFIGURATION FOLDER PATH] |Folder is optional
+|ApiKeyName|[API KEY NAME]|Will be passed in the header  :  the file name of the config.
+|AppName| [APPLICATION NAME]| This is the name of the Function App, used in log analytics|
+|StorageAcctName|[STORAGE ACCOUNT NAME]|Example  "AzureWebJobsStorage"|
+
+
+---
+
+> **Note:**  Look at the configuration file in the **Config** Folder and created a Table to record information.
+
+## Configuration Files 
+
+> **Note:** The **Configuration** is located in the  FunctionApp  in a **Config** Folder.
+
+|FileName|Description|
+|:----|:----|
+|43EFE991E8614CFB9EDECF1B0FDED37D.json| **Upload File** Parse JSON/CSV Directly to NO SQL DB|
+|6B427917E36A4DA281D57F9A64AD9D55.json| Get reords using a BatchID  |
+
+
+> Create the following blob containers and share in azure storage
+
+|ContainerName|Description|
+|:----|:----|
+|config|Location for the configuration files|
+
+|Table|Description|
+|:----|:----|
+|training[YYYYMMDD]|N0 SQL DataStore|
 
 ---
 
