@@ -40,8 +40,7 @@ This solution should handle large datasets, ensure data integrity, and be scalab
   3. Parse the CSV file into records and transform to a JSON Payload
   4. Write the JSON payload into a Azure Table NoSQL Database
   5. Generate a unique `Batch ID` (UUID or timestamp-based).
-  6. Insert records into Azure Table NoSQL under the corresponding `Batch ID`.
-  7. Return the `Batch ID` as a response to the API call.
+  6. Return the `Batch ID` as a response to the API call.
 
 #### **2. Data Retrieval Workflow**
 
