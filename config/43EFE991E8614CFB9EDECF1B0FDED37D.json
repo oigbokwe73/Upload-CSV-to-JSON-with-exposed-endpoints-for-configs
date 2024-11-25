@@ -12,7 +12,7 @@
 			"Key": "ConvertStringToStream",
 			"Type": "Xenhey.BPM.Core.Net8.Processes.MessageBuilderProcess",
 			"Async": "false",
-			"IsEnable": "true",
+			"IsEnable": "false",
 			"DataFlowProcessParameters": [
 				{
 					"Key": "ConvertStringToStream",
@@ -40,7 +40,7 @@
       "Key": "WriteToAzureStorage",
       "Type": "Xenhey.BPM.Core.Net8.Processes.AzureTableStorageProcess",
       "Async": "false",
-      "IsEnable": "true",
+      "IsEnable": "false",
       "DataFlowProcessParameters": [
         {
           "Key": "CreateRecordForAzureTableBatch",
@@ -57,6 +57,34 @@
         {
           "Key": "TableName",
           "Value": "training20241123"
+        }
+      ]
+    },
+		{
+      "Key": "TransformDBResults",
+      "Type": "Xenhey.BPM.Core.Net8.Processes.TransformationProcess",
+      "Async": "false",
+      "IsEnable": "false",
+      "DataFlowProcessParameters": [
+        {
+          "Key": "TransformJSONPayload",
+          "Value": "yes"
+        },
+        {
+          "Key": "ManagedTemplateName",
+          "Value": "yes"
+        },
+        {
+          "Key": "FileName",
+          "Value": "response.liquid"
+        },
+        {
+          "Key": "Container",
+          "Value": "config"
+        },
+        {
+          "Key": "StorageAccount",
+          "Value": "AzureWebJobsStorage"
         }
       ]
     }
