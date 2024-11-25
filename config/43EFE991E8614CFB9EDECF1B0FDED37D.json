@@ -8,19 +8,7 @@
   ],
   "Type": "",
   "DataFlowProcess": [
-    {
-			"Key": "ConvertStringToStream",
-			"Type": "Xenhey.BPM.Core.Net8.Processes.MessageBuilderProcess",
-			"Async": "false",
-			"IsEnable": "false",
-			"DataFlowProcessParameters": [
-				{
-					"Key": "ConvertStringToStream",
-					"Value": "yes"
-				}
-			]
-		},
-		{
+ 		{
 			"Key": "ConvertCSVToJson",
 			"Type": "Xenhey.BPM.Core.Net8.Processes.CSVProcess",
 			"Async": "false",
@@ -40,7 +28,7 @@
       "Key": "WriteToAzureStorage",
       "Type": "Xenhey.BPM.Core.Net8.Processes.AzureTableStorageProcess",
       "Async": "false",
-      "IsEnable": "false",
+      "IsEnable": "true",
       "DataFlowProcessParameters": [
         {
           "Key": "CreateRecordForAzureTableBatch",
@@ -56,7 +44,7 @@
         },
         {
           "Key": "TableName",
-          "Value": "training20241123"
+          "Value": "training20241125"
         }
       ]
     },
@@ -64,7 +52,7 @@
       "Key": "TransformDBResults",
       "Type": "Xenhey.BPM.Core.Net8.Processes.TransformationProcess",
       "Async": "false",
-      "IsEnable": "false",
+      "IsEnable": "true",
       "DataFlowProcessParameters": [
         {
           "Key": "TransformJSONPayload",
